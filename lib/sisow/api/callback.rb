@@ -2,7 +2,9 @@ module Sisow
   module Api
     class Callback
 
-      attr_accessor :transaction_id,
+      attr_accessor :merchant_id,
+                    :merchant_key,
+                    :transaction_id,
                     :entrance_code,
                     :status,
                     :sha1
@@ -49,7 +51,7 @@ module Sisow
       private
 
         def valid_callback
-          string = [ @transaction_id, @entrance_code, @status, Sisow.configuration.merchant_id, Sisow.configuration.merchant_key ].join
+          string = [ @transaction_id, @entrance_code, @status, @merchant_id, @merchant_key ].join
           calculated_sha1 = Digest::SHA1.hexdigest(string)
 
           calculated_sha1 == @sha1

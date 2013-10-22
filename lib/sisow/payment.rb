@@ -2,6 +2,10 @@ module Sisow
   class Payment
 
     attr_accessor :purchase_id,
+                  :merchant_id,
+                  :merchant_key,
+                  :debug_mode,
+                  :test_mode,
                   :issuer_id,
                   :description,
                   :amount,
@@ -32,11 +36,16 @@ module Sisow
     def valid?
       entrance_code.index(/-|_/).nil? &&
       purchase_id.index(/\#|_/).nil? &&
-      (!amount.nil? && amount != '')
+      (!amount.nil? && amount != '') &&
+      !merchant_id.blank? && !merchant_key.blank?
     end
 
     def ideal?
       payment_method == 'ideal'
+    end
+
+    def test_mode_enabled?
+      test_mode == true
     end
 
     def payment_method; raise 'Implement me in a subclass'; end

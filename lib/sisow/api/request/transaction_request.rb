@@ -17,7 +17,7 @@ module Sisow
       end
 
       def params
-        default_params.merge!(transaction_params)
+        transaction_params
       end
 
       def clean(response)
@@ -37,8 +37,8 @@ module Sisow
           payment.purchase_id,
           payment.entrance_code,
           payment.amount,
-          Sisow.configuration.merchant_id,
-          Sisow.configuration.merchant_key
+          payment.merchant_id,
+          payment.merchant_key
         ].join
 
         Digest::SHA1.hexdigest(string)
@@ -48,6 +48,8 @@ module Sisow
 
         def transaction_params
           params = {
+            :merchantid   => payment.merchant_id,
+            :test         => payment.test_mode_enabled? ? 'true' : nil,
             :payment      => payment.payment_method,
             :purchaseid   => payment.purchase_id,
             :amount       => payment.amount,
@@ -72,7 +74,7 @@ module Sisow
           # In production mode, the other payment types do
           # not need an issuerid at all, so we just delete it.
           unless payment.ideal?
-            if Sisow.configuration.test_mode_enabled?
+            if payment.test_mode_enabled?
               params[:issuerid] = '99'
             else
               params.delete(:issuerid)
@@ -94,8 +96,8 @@ module Sisow
           string = [
             response.transactionrequest.transaction.trxid,
             response.transactionrequest.transaction.issuerurl,
-            Sisow.configuration.merchant_id,
-            Sisow.configuration.merchant_key
+            payment.merchant_id,
+            payment.merchant_key
           ].join
 
           calculated_sha1 = Digest::SHA1.hexdigest(string)
