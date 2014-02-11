@@ -9,6 +9,9 @@ module Sisow
                   :issuer_id,
                   :description,
                   :amount,
+                  :billing_mail,
+                  :including,
+                  :days,
                   :entrance_code,
                   :return_url,
                   :cancel_url,
@@ -49,6 +52,14 @@ module Sisow
     end
 
     def payment_method; raise 'Implement me in a subclass'; end
+
+    def validity_string(response)
+      [ response.transactionrequest.transaction.trxid,
+        response.transactionrequest.transaction.issuerurl,
+        merchant_id,
+        merchant_key
+      ].join
+    end
 
     private
 

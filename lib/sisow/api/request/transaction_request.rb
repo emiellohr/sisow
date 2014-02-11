@@ -61,6 +61,9 @@ module Sisow
             :callbackurl  => payment.callback_url,
             :notifyurl    => payment.notify_url,
             :shop_id      => payment.shop_id,
+            :billing_mail => payment.billing_mail,
+            :including    => payment.including,
+            :days         => payment.days,
             :sha1         => sha1
           }
 
@@ -93,12 +96,7 @@ module Sisow
         end
 
         def check_validity!(response)
-          string = [
-            response.transactionrequest.transaction.trxid,
-            response.transactionrequest.transaction.issuerurl,
-            payment.merchant_id,
-            payment.merchant_key
-          ].join
+          string = payment.validity_string(response)
 
           calculated_sha1 = Digest::SHA1.hexdigest(string)
 
