@@ -37,6 +37,7 @@ module Sisow
           payment.purchase_id,
           payment.entrance_code,
           payment.amount,
+          payment.shop_id,
           payment.merchant_id,
           payment.merchant_key
         ].join

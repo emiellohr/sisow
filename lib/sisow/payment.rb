@@ -2,6 +2,7 @@ module Sisow
   class Payment
 
     attr_accessor :purchase_id,
+                  :shop_id,
                   :merchant_id,
                   :merchant_key,
                   :debug_mode,
@@ -30,10 +31,6 @@ module Sisow
 
     def transaction_id
       response.trxid if response.trxid?
-    end
-
-    def shop_id
-      Sisow.configuration.shop_id
     end
 
     def valid?
