@@ -61,7 +61,7 @@ module Sisow
             :cancelurl    => payment.cancel_url,
             :callbackurl  => payment.callback_url,
             :notifyurl    => payment.notify_url,
-            :shop_id      => payment.shop_id,
+            :shopid       => payment.shop_id,
             :billing_mail => payment.billing_mail,
             :including    => payment.including,
             :days         => payment.days,
